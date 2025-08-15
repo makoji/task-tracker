@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { useAuth } from '../context/AuthContext.js';
-import { API_ENDPOINTS } from '../task-management-app/utils/constants.js';
+import { API_ENDPOINTS } from '../utils/constants.js';
 
 
 export const useTasks = () => {

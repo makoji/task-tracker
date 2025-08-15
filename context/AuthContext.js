@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { API_ENDPOINTS } from '../task-management-app/utils/constants';
+import { API_ENDPOINTS } from '../utils/constants';
 
 const AuthContext = createContext();
 

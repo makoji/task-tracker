@@ -1,4 +1,4 @@
-import { useAuth } from '../context/auth-context.js';
+import { useAuth } from '../context/AuthContext.js';
 import { LogOut, User } from 'lucide-react';
 
 export default function Header() {

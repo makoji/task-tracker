@@ -1,13 +1,15 @@
 import { useState } from 'react';
 
 import { useAuth } from '../context/AuthContext.js';
-import Layout from '../../components/layout.js';
-import AuthForm from '../../components/auth-form.js';
-import TaskList from '../../components/task-list.js';
-import FilterBar from '../../components/filter-bar.js';
-import TaskStats from '../../components/task-stats.js';
-import TaskForm from '../../components/task-form.js';
-import { useTasks } from '../../hooks/use-tasks.js';
+
+import Layout from '../components/layout.js';
+import AuthForm from '../components/auth-form.js';
+import TaskList from '../components/task-list.js';
+import FilterBar from '../components/filter-bar.js';
+import TaskStats from '../components/task-stats.js';
+import TaskForm from '../components/task-form.js';
+
+import { useTasks } from '../hooks/useTasks.js';
 
 import { CheckCircle2, Plus, Flag, Filter } from 'lucide-react';
 

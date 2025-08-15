@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../context/auth-context.js';
+import { useAuth } from '../context/AuthContext.js';
 
 export default function AuthForm({ onClose }) {
   const { login, register } = useAuth();

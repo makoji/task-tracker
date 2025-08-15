@@ -1,367 +1,105 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Global Styles */
-@layer base {
-  html {
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  body {
-    @apply bg-gray-50 text-gray-900 antialiased;
-  }
-  
-  * {
-    @apply box-border;
-  }
+/* Simple Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Component Styles */
-@layer components {
-  /* Landing Page */
-  .landing-container {
-    @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100;
-  }
-  
-  .landing-content {
-    @apply container mx-auto px-4 py-16;
-  }
-  
-  .landing-hero {
-    @apply text-center mb-12;
-  }
-  
-  .landing-title {
-    @apply text-5xl font-bold text-gray-800 mb-6;
-  }
-  
-  .landing-subtitle {
-    @apply text-xl text-gray-600 mb-8 max-w-2xl mx-auto;
-  }
-  
-  .landing-cta {
-    @apply bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg;
-  }
-  
-  .features-grid {
-    @apply grid md:grid-cols-3 gap-8 max-w-4xl mx-auto;
-  }
-  
-  .feature-card {
-    @apply text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow;
-  }
-  
-  .feature-icon {
-    @apply w-12 h-12 text-blue-600 mx-auto mb-4;
-  }
-  
-  .feature-title {
-    @apply text-xl font-semibold text-gray-800 mb-2;
-  }
-  
-  .feature-description {
-    @apply text-gray-600;
-  }
-  
-  /* App Layout */
-  .app-container {
-    @apply min-h-screen bg-gray-50;
-  }
-  
-  /* Header */
-  .header {
-    @apply bg-white shadow-sm border-b;
-  }
-  
-  .header-content {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-  
-  .header-nav {
-    @apply flex justify-between items-center py-4;
-  }
-  
-  .header-brand {
-    @apply flex items-center space-x-4;
-  }
-  
-  .header-title {
-    @apply text-2xl font-bold text-gray-800;
-  }
-  
-  .header-welcome {
-    @apply text-sm text-gray-500;
-  }
-  
-  .header-actions {
-    @apply flex items-center space-x-4;
-  }
-  
-  /* Buttons */
-  .btn-primary {
-    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2;
-  }
-  
-  .btn-secondary {
-    @apply text-gray-600 hover:text-gray-800 flex items-center space-x-2 transition-colors;
-  }
-  
-  .btn-danger {
-    @apply text-red-600 hover:text-red-800 transition-colors;
-  }
-  
-  .btn-icon {
-    @apply w-4 h-4;
-  }
-  
-  /* Forms */
-  .form-group {
-    @apply space-y-4;
-  }
-  
-  .form-label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
-  }
-  
-  .form-input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors;
-  }
-  
-  .form-textarea {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent h-20 resize-none transition-colors;
-  }
-  
-  .form-select {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors;
-  }
-  
-  .form-search {
-    @apply pl-10 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors;
-  }
-  
-  /* Modals */
-  .modal-overlay {
-    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
-  }
-  
-  .modal-content {
-    @apply bg-white rounded-xl p-6 w-full max-w-md mx-4 relative;
-  }
-  
-  .modal-title {
-    @apply text-2xl font-bold text-gray-800 mb-6;
-  }
-  
-  .modal-close {
-    @apply absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl cursor-pointer;
-  }
-  
-  /* Cards */
-  .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200;
-  }
-  
-  .card-header {
-    @apply p-6 border-b border-gray-200;
-  }
-  
-  .card-content {
-    @apply p-6;
-  }
-  
-  .card-title {
-    @apply text-lg font-semibold text-gray-800;
-  }
-  
-  /* Task Components */
-  .task-item {
-    @apply p-6 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0;
-  }
-  
-  .task-item.completed {
-    @apply opacity-60;
-  }
-  
-  .task-content {
-    @apply flex items-start justify-between;
-  }
-  
-  .task-main {
-    @apply flex items-start space-x-4 flex-1;
-  }
-  
-  .task-checkbox {
-    @apply mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors cursor-pointer;
-  }
-  
-  .task-checkbox.completed {
-    @apply bg-green-500 border-green-500 text-white;
-  }
-  
-  .task-checkbox.pending {
-    @apply border-gray-300 hover:border-blue-500;
-  }
-  
-  .task-details {
-    @apply flex-1 min-w-0;
-  }
-  
-  .task-title {
-    @apply text-lg font-medium text-gray-800;
-  }
-  
-  .task-title.completed {
-    @apply line-through text-gray-500;
-  }
-  
-  .task-description {
-    @apply mt-1 text-sm text-gray-600;
-  }
-  
-  .task-description.completed {
-    @apply text-gray-400;
-  }
-  
-  .task-meta {
-    @apply flex items-center space-x-4 mt-2;
-  }
-  
-  .task-actions {
-    @apply flex items-center space-x-2;
-  }
-  
-  /* Tags and Badges */
-  .tag {
-    @apply text-xs px-2 py-1 rounded-full font-medium;
-  }
-  
-  .tag-category {
-    @apply bg-blue-100 text-blue-800;
-  }
-  
-  .tag-priority-low {
-    @apply bg-green-100 text-green-600;
-  }
-  
-  .tag-priority-medium {
-    @apply bg-yellow-100 text-yellow-600;
-  }
-  
-  .tag-priority-high {
-    @apply bg-orange-100 text-orange-600;
-  }
-  
-  .tag-priority-urgent {
-    @apply bg-red-100 text-red-600;
-  }
-  
-  .date-display {
-    @apply flex items-center space-x-1 text-xs text-gray-500;
-  }
-  
-  /* Stats Dashboard */
-  .stats-grid {
-    @apply grid grid-cols-1 md:grid-cols-4 gap-4 mb-6;
-  }
-  
-  .stat-card {
-    @apply bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow;
-  }
-  
-  .stat-number {
-    @apply text-2xl font-bold;
-  }
-  
-  .stat-number.total {
-    @apply text-gray-800;
-  }
-  
-  .stat-number.pending {
-    @apply text-blue-600;
-  }
-  
-  .stat-number.completed {
-    @apply text-green-600;
-  }
-  
-  .stat-number.urgent {
-    @apply text-red-600;
-  }
-  
-  .stat-label {
-    @apply text-sm text-gray-600;
-  }
-  
-  /* Filters */
-  .filters-container {
-    @apply bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200;
-  }
-  
-  .filters-grid {
-    @apply grid grid-cols-1 md:grid-cols-4 gap-4;
-  }
-  
-  .search-container {
-    @apply relative;
-  }
-  
-  .search-icon {
-    @apply w-4 h-4 absolute left-3 top-3 text-gray-400;
-  }
-  
-  /* Loading and Error States */
-  .loading-spinner {
-    @apply inline-block w-4 h-4 border-2 border-current border-r-transparent rounded-full animate-spin;
-  }
-  
-  .error-message {
-    @apply bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4;
-  }
-  
-  .empty-state {
-    @apply p-8 text-center text-gray-500;
-  }
-  
-  /* Animations */
-  .fade-in {
-    @apply animate-fade-in;
-  }
-  
-  .slide-up {
-    @apply animate-slide-up;
-  }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
 }
 
-/* Custom Animations */
-@layer utilities {
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slide-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .animate-fade-in {
-    animation: fade-in 0.3s ease-out;
-  }
-  
-  .animate-slide-up {
-    animation: slide-up 0.4s ease-out;
-  }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1, h2, h3 {
+  margin-bottom: 1rem;
+}
+
+button {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0051a2;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #0070f3;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.error {
+  background-color: #fee;
+  color: #c33;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #fcc;
+  margin-bottom: 20px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #999;
+}
+
+.close:hover {
+  color: #333;
 }
