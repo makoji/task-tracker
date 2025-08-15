@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { TASK_CATEGORIES, TASK_PRIORITIES } from '../utils/constants.js';
 
 export default function TaskForm({ task, onSubmit, onClose }) {
-  onst [formData, setFormData] = useState(
+  const [formData, setFormData] = useState(
     task || {
       title: '',
       description: '',
