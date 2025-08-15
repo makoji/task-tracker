@@ -4,8 +4,10 @@ import Task from '../../../models/Task';
 import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(req, res) {
+
   try {
-    // Check authentication
+
+    // check auth
     const session = await getServerSession(req, res, authOptions);
     if (!session) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -14,8 +16,9 @@ export default async function handler(req, res) {
     await connectToDatabase();
 
     switch (req.method) {
-      case 'GET':
-        // Get all tasks for the authenticated user
+
+      case 'GET':  // get the existing tasks for the logged in user
+
         try {
           const tasks = await Task.find({ userId: session.user.id })
             .sort({ createdAt: -1 });
@@ -27,12 +30,12 @@ export default async function handler(req, res) {
         }
         break;
 
-      case 'POST':
-        // Create a new task
+      case 'POST':  // to add a new task
+
         try {
           const { title, description, category, priority, dueDate } = req.body;
 
-          // Validation
+          // validate ^
           if (!title || !category || !priority) {
             return res.status(400).json({ message: 'Title, category, and priority are required' });
           }
@@ -59,12 +62,18 @@ export default async function handler(req, res) {
         }
         break;
 
+
       default:
         res.setHeader('Allow', ['GET', 'POST']);
         res.status(405).json({ message: `Method ${req.method} not allowed` });
+
     }
-  } catch (error) {
+
+  } catch (error) { //just in case
+    
     console.error('API error:', error);
     res.status(500).json({ message: 'Internal server error' });
+
   }
+
 }

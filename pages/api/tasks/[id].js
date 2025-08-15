@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const { id } = req.query;
 
   try {
-    // Check authentication
+    // check auth
     const session = await getServerSession(req, res, authOptions);
     if (!session) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     switch (req.method) {
       case 'GET':
-        // Get single task
+        // get A task
         try {
           const task = await Task.findOne({ 
             _id: id, 
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         break;
 
       case 'PUT':
-        // Update task
+        // update a task
         try {
           const { title, description, category, priority, dueDate, completed } = req.body;
 
@@ -74,7 +74,7 @@ export default async function handler(req, res) {
         break;
 
       case 'PATCH':
-        // Toggle task completion
+        //  completion toggle 
         try {
           const task = await Task.findOne({ _id: id, userId: session.user.id });
           
@@ -94,7 +94,7 @@ export default async function handler(req, res) {
         break;
 
       case 'DELETE':
-        // Delete task
+        // delete a task
         try {
           const task = await Task.findOneAndDelete({ 
             _id: id, 

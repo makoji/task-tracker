@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { useAuth } from '../context/auth-context.js';
+import { useAuth } from '../context/AuthContext.js';
 import { API_ENDPOINTS } from '../task-management-app/utils/constants.js';
 
 

@@ -16,14 +16,14 @@ export default NextAuth({
         try {
           await connectToDatabase();
 
-          // Find user by email
+          // find by email - checks if there's an entry for the provided info
           const user = await User.findOne({ email: credentials.email }).select('+password');
           
           if (!user) {
             throw new Error('No user found with this email');
           }
 
-          // Check password
+          // checks if pw is correct
           const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
           
           if (!isPasswordValid) {
@@ -58,8 +58,8 @@ export default NextAuth({
     }
   },
   pages: {
-    signIn: '/', // Custom sign-in page
-    error: '/' // Error page
+    signIn: '/', //sign in page
+    error: '/' // error page
   },
   secret: process.env.NEXTAUTH_SECRET
 });

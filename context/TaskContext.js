@@ -1,10 +1,10 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
-import { useAuth } from './AuthContext';
-import { API_ENDPOINTS } from '../utils/constants';
+import { useAuth } from './AuthContext.js';
+import { API_ENDPOINTS } from '../utils/constants.js';
 
 const TaskContext = createContext();
 
-// Task reducer for complex state management
+// for comllex state management
 const taskReducer = (state, action) => {
   switch (action.type) {
     case 'SET_LOADING':
@@ -72,7 +72,7 @@ export const TaskProvider = ({ children }) => {
   const [state, dispatch] = useReducer(taskReducer, initialState);
   const { isAuthenticated } = useAuth();
 
-  // Fetch all tasks
+  // gets all existing tasks
   const fetchTasks = async () => {
     if (!isAuthenticated) return;
     
@@ -93,7 +93,7 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Create a new task
+  // add a new task
   const createTask = async (taskData) => {
     try {
       const response = await fetch(API_ENDPOINTS.tasks, {
@@ -118,7 +118,7 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Update a task
+  // update an existing task
   const updateTask = async (id, updates) => {
     try {
       const response = await fetch(API_ENDPOINTS.taskById(id), {
@@ -143,7 +143,7 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Toggle task completion
+  // mark task as completed or not    (toggle)
   const toggleTask = async (id) => {
     try {
       const response = await fetch(API_ENDPOINTS.taskById(id), {
@@ -164,7 +164,7 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Delete a task
+  //  delete a task
   const deleteTask = async (id) => {
     try {
       const response = await fetch(API_ENDPOINTS.taskById(id), {
@@ -183,7 +183,7 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // Filter tasks
+  // filtering (by category priority etc)
   const filterTasks = (filters) => {
     return state.tasks.filter(task => {
       const matchesCategory = filters.category === 'all' || task.category === filters.category;
@@ -199,7 +199,7 @@ export const TaskProvider = ({ children }) => {
     });
   };
 
-  // Get task statistics
+  // get task stats
   const getTaskStats = () => {
     const total = state.tasks.length;
     const completed = state.tasks.filter(t => t.completed).length;
@@ -213,12 +213,12 @@ export const TaskProvider = ({ children }) => {
     return { total, completed, pending, urgent, overdue };
   };
 
-  // Clear error
+  // error 
   const clearError = () => {
     dispatch({ type: 'SET_ERROR', payload: null });
   };
 
-  // Load tasks when authenticated
+  // / load tasks when logged in
   useEffect(() => {
     if (isAuthenticated) {
       fetchTasks();
@@ -248,6 +248,7 @@ export const TaskProvider = ({ children }) => {
   );
 };
 
+// error catching, because someething will go wrong somehow somewhere
 export const useTaskContext = () => {
   const context = useContext(TaskContext);
   if (!context) {

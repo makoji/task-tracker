@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   try {
     const { name, email, password } = req.body;
 
-    // Validation
+    // validationn
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
@@ -21,24 +21,24 @@ export default async function handler(req, res) {
 
     await connectToDatabase();
 
-    // Check if user already exists
+    // checks if the data is already assigned to a user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists with this email' });
     }
 
-    // Hash password
+    // hash the pw
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Create user
+    // add a new user
     const user = await User.create({
       name,
       email,
       password: hashedPassword
     });
 
-    // Return user without password
+    // return user info -without password
     const { password: _, ...userWithoutPassword } = user.toObject();
 
     res.status(201).json({
