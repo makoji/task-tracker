@@ -1,9 +1,10 @@
 import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../auth/[...nextauth]';
 import connectToDatabase from '../../../lib/mongodb';
 import Task from '../../../models/Task';
-import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(req, res) {
+
   const { id } = req.query;
 
   try {
@@ -13,11 +14,13 @@ export default async function handler(req, res) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
+    //  connect to mongodb
     await connectToDatabase();
+
 
     switch (req.method) {
       case 'GET':
-        // get A task
+         // get A task
         try {
           const task = await Task.findOne({ 
             _id: id, 
@@ -35,13 +38,48 @@ export default async function handler(req, res) {
         }
         break;
 
+
       case 'PUT':
         // update a task
         try {
           const { title, description, category, priority, dueDate, completed } = req.body;
 
+          // check that its filled correctly
+          if (title !== undefined && (!title || title.trim().length === 0)) {
+            return res.status(400).json({ message: 'Task title cannot be empty' });
+          }
+
+          if (title !== undefined && title.trim().length > 100) {
+            return res.status(400).json({ message: 'Task title must be less than 100 characters' });
+          }
+
+          if (description !== undefined && description && description.length > 500) {
+            return res.status(400).json({ message: 'Task description must be less than 500 characters' });
+          }
+
+          if (category !== undefined) {
+            const validCategories = ['Work', 'Personal', 'Shopping', 'Health', 'Education', 'Finance'];
+            if (!validCategories.includes(category)) {
+              return res.status(400).json({ message: 'Please select a valid category' });
+            }
+          }
+
+          if (priority !== undefined) {
+            const validPriorities = ['Low', 'Medium', 'High', 'Urgent'];
+            if (!validPriorities.includes(priority)) {
+              return res.status(400).json({ message: 'Please select a valid priority' });
+            }
+          }
+
+          if (dueDate !== undefined && dueDate) {
+            const date = new Date(dueDate);
+            if (isNaN(date.getTime())) {
+              return res.status(400).json({ message: 'Please enter a valid due date' });
+            }
+          }
+
           const updateData = {
-            ...(title !== undefined && { title }),
+            ...(title !== undefined && { title: title.trim() }),
             ...(description !== undefined && { description }),
             ...(category !== undefined && { category }),
             ...(priority !== undefined && { priority }),
@@ -69,12 +107,17 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: messages.join(', ') });
           }
           
+          if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid task ID format' });
+          }
+          
           res.status(500).json({ message: 'Error updating task' });
         }
         break;
 
+
       case 'PATCH':
-        //  completion toggle 
+        ///  completion toggle 
         try {
           const task = await Task.findOne({ _id: id, userId: session.user.id });
           
@@ -89,9 +132,15 @@ export default async function handler(req, res) {
           res.status(200).json(task);
         } catch (error) {
           console.error('Error toggling task:', error);
+          
+          if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid task ID format' });
+          }
+          
           res.status(500).json({ message: 'Error toggling task' });
         }
         break;
+
 
       case 'DELETE':
         // delete a task
@@ -108,6 +157,11 @@ export default async function handler(req, res) {
           res.status(200).json({ message: 'Task deleted successfully' });
         } catch (error) {
           console.error('Error deleting task:', error);
+          
+          if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid task ID format' });
+          }
+          
           res.status(500).json({ message: 'Error deleting task' });
         }
         break;

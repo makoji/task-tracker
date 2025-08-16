@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext.js';
+import { signIn, getSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 export default function AuthForm({ onClose }) {
-  const { login, register } = useAuth();
+  const router = useRouter();
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -26,14 +27,74 @@ export default function AuthForm({ onClose }) {
 
     try {
       if (isRegistering) {
-        await register(formData);
-        // succefully registered -> automatically signed in
-        await login({ email: formData.email, password: formData.password });
-      } else {
-        await login({ email: formData.email, password: formData.password });
+        // sign up first
+        const response = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Registration failed');
+        }
+
+        console.log('Registration successful');
       }
-      onClose();
+
+      // Sign in  (both after a normal log in, and after singing up )
+      console.log('Attempting sign in...');
+      
+      const result = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
+
+      console.log('Sign in result:', result);
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
+      if (result?.ok) {
+        console.log('Sign in successful, checking session...');
+        
+        // close modal
+        onClose();
+        
+        // wait for the session to be established
+        let sessionAttempts = 0;
+        const maxAttempts = 10;
+        
+        const checkSession = async () => {
+          sessionAttempts++;
+          const session = await getSession();
+          
+          console.log(`Session check ${sessionAttempts}:`, session);
+          
+          if (session?.user) {
+            console.log('Session established, redirecting...');
+            router.replace('/');
+          } else if (sessionAttempts < maxAttempts) {
+            // retry after a delay
+            setTimeout(checkSession, 200);
+          } else {
+            console.log('Session not established after max attempts');
+            // reload the page just in ase
+            window.location.reload();
+          }
+        };
+        
+        // start checking for session
+        setTimeout(checkSession, 100);
+      }
+      
     } catch (err) {
+      console.error('🚨 Auth error:', err);
       setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
@@ -95,17 +156,24 @@ export default function AuthForm({ onClose }) {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+            className="btn-primary"
+            style={{ width: '100%', justifyContent: 'center' }}
           >
-            {loading && <div className="loading-spinner" />}
-            <span>{loading ? 'Processing...' : (isRegistering ? 'Sign Up' : 'Sign In')}</span>
+            {loading ? 'Processing...' : (isRegistering ? 'Sign Up' : 'Sign In')}
           </button>
         </div>
         
-        <div className="mt-4 text-center">
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <button
             onClick={() => setIsRegistering(!isRegistering)}
-            className="text-blue-600 hover:text-blue-700 text-sm"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#2563eb',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              fontSize: '0.9rem'
+            }}
           >
             {isRegistering ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
           </button>

@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import connectToDatabase from '../../../lib/mongodb';
 import User from '../../../models/User';
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -14,52 +14,88 @@ export default NextAuth({
       },
       async authorize(credentials) {
         try {
+          console.log('🔐 Authorize called with:', credentials.email);
+          
           await connectToDatabase();
 
-          // find by email - checks if there's an entry for the provided info
           const user = await User.findOne({ email: credentials.email }).select('+password');
           
           if (!user) {
-            throw new Error('No user found with this email');
+            console.log('No user found');
+            return null;
           }
 
-          // checks if pw is correct
           const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
           
           if (!isPasswordValid) {
-            throw new Error('Invalid password');
+            console.log('Invalid password');
+            return null;
           }
 
+          console.log('User authorized:', user._id.toString());
+          
           return {
             id: user._id.toString(),
             email: user.email,
             name: user.name
           };
         } catch (error) {
-          console.error('Auth error:', error);
+          console.error('Authorization error:', error);
           return null;
         }
       }
     })
   ],
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 24 hours
+  },
+  jwt: {
+    maxAge: 24 * 60 * 60, // 24 hours
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile }) {
+      console.log('JWT callback:', { user: !!user, account: !!account });
+      
       if (user) {
         token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        console.log('Token updated with user:', user.id);
       }
+      
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id;
+      console.log('Session callback:', { session: !!session, token: !!token });
+      
+      if (token && session.user) {
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.name = token.name;
+        console.log('Session updated:', session.user.id);
+      }
+      
       return session;
     }
   },
   pages: {
-    signIn: '/', //sign in page
-    error: '/' // error page
+    signIn: '/',
+    error: '/'
   },
-  secret: process.env.NEXTAUTH_SECRET
-});
+  debug: process.env.NODE_ENV === 'development',
+  secret: process.env.NEXTAUTH_SECRET,
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: false // Set to false for localhost
+      }
+    }
+  }
+};
+
+export default NextAuth(authOptions);

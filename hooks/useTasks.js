@@ -1,24 +1,24 @@
 import { useState, useEffect } from 'react';
-
-import { useAuth } from '../context/AuthContext.js';
-import { API_ENDPOINTS } from '../utils/constants.js';
-
+import { useAuth } from '../context/AuthContext';
 
 export const useTasks = () => {
+
   const { isAuthenticated } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+
   // get all tasks
   const fetchTasks = async () => {
+
     if (!isAuthenticated) return;
     
     try {
       setLoading(true);
       setError(null);
       
-      const response = await fetch(API_ENDPOINTS.tasks);
+      const response = await fetch('/api/tasks');
       const data = await response.json();
       
       if (!response.ok) {
@@ -32,14 +32,18 @@ export const useTasks = () => {
     } finally {
       setLoading(false);
     }
+
   };
+
+
 
   // add a new task
   const createTask = async (taskData) => {
+
     try {
       setError(null);
       
-      const response = await fetch(API_ENDPOINTS.tasks, {
+      const response = await fetch('/api/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,14 +63,18 @@ export const useTasks = () => {
       setError(err.message);
       throw err;
     }
+
   };
+
+
 
   // update existing task
   const updateTask = async (id, updates) => {
+
     try {
       setError(null);
       
-      const response = await fetch(API_ENDPOINTS.taskById(id), {
+      const response = await fetch(`/api/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -89,14 +97,19 @@ export const useTasks = () => {
       setError(err.message);
       throw err;
     }
+
   };
+
+
 
   // marked as complete - toggling
   const toggleTask = async (id) => {
+
     try {
+
       setError(null);
       
-      const response = await fetch(API_ENDPOINTS.taskById(id), {
+      const response = await fetch(`/api/tasks/${id}`, {
         method: 'PATCH',
       });
       
@@ -114,15 +127,20 @@ export const useTasks = () => {
     } catch (err) {
       setError(err.message);
       throw err;
+
     }
   };
 
+
+
   // delete a task
   const deleteTask = async (id) => {
+
     try {
+
       setError(null);
       
-      const response = await fetch(API_ENDPOINTS.taskById(id), {
+      const response = await fetch(`/api/tasks/${id}`, {
         method: 'DELETE',
       });
       
@@ -132,15 +150,21 @@ export const useTasks = () => {
       }
       
       setTasks(prev => prev.filter(task => task._id !== id));
+
     } catch (err) {
       setError(err.message);
       throw err;
     }
+
   };
+
+
 
   // filter (by category priority etc)
   const filterTasks = (filters) => {
+
     return tasks.filter(task => {
+
       const matchesCategory = filters.category === 'all' || task.category === filters.category;
       const matchesPriority = filters.priority === 'all' || task.priority === filters.priority;
       const matchesStatus = filters.status === 'all' || 
@@ -151,26 +175,48 @@ export const useTasks = () => {
         task.description?.toLowerCase().includes(filters.search.toLowerCase());
       
       return matchesCategory && matchesPriority && matchesStatus && matchesSearch;
+
     });
   };
 
+
+
   // get task stats
   const getTaskStats = () => {
+
     const total = tasks.length;
     const completed = tasks.filter(t => t.completed).length;
     const pending = total - completed;
     const urgent = tasks.filter(t => t.priority === 'Urgent' && !t.completed).length;
     
     return { total, completed, pending, urgent };
+
   };
+
+
+
+  // clear error
+  const clearError = () => {
+
+    setError(null);
+
+  };
+
+
 
   // load tasks when logged in
   useEffect(() => {
+
     if (isAuthenticated) {
+
       fetchTasks();
+
     } else {
+
       setTasks([]);
+
     }
+
   }, [isAuthenticated]);
 
   return {
@@ -184,5 +230,7 @@ export const useTasks = () => {
     deleteTask,
     filterTasks,
     getTaskStats,
+    clearError,
   };
+
 };

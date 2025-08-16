@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        {/* Remove ANY viewport meta tag */}
         <meta name="description" content="Simple task management application" />
         <link rel="icon" href="/favicon.ico" />
         <link

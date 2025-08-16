@@ -1,22 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
-import { useAuth } from '../context/AuthContext.js';
-
-import Layout from '../components/layout.js';
-import AuthForm from '../components/auth-form.js';
-import TaskList from '../components/task-list.js';
-import FilterBar from '../components/filter-bar.js';
-import TaskStats from '../components/task-stats.js';
-import TaskForm from '../components/task-form.js';
-
-import { useTasks } from '../hooks/useTasks.js';
+import Layout from '../components/layout';
+import AuthForm from '../components/auth-form';
+import TaskList from '../components/task-list';
+import FilterBar from '../components/filter-bar';
+import TaskStats from '../components/task-stats';
+import TaskForm from '../components/task-form';
+import { useTasks } from '../hooks/useTasks';
 
 import { CheckCircle2, Plus, Flag, Filter } from 'lucide-react';
 
 
-
 export default function Home() {
-  const { user, isAuthenticated } = useAuth();
+  const { data: session, status } = useSession();
+  
   const { tasks, loading, error, createTask, updateTask, toggleTask, deleteTask, filterTasks, getTaskStats } = useTasks();
   
   const [showAuthForm, setShowAuthForm] = useState(false);
@@ -31,6 +29,14 @@ export default function Home() {
 
   const filteredTasks = filterTasks(filters);
   const stats = getTaskStats();
+
+
+  // log session changes
+  useEffect(() => {
+    console.log('Session status:', status);
+    console.log('Session data:', session);
+  }, [session, status]);
+
 
   const handleCreateTask = async (taskData) => {
     try {
@@ -66,39 +72,68 @@ export default function Home() {
     }
   };
 
-  // home page if not logged in 
+  // show loading state
+  if (status === 'loading') {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        fontSize: '1.2rem'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '4px solid #e2e8f0',
+            borderTop: '4px solid #667eea',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
+
+  const isAuthenticated = status === 'authenticated' && session?.user;
+
+  // landing page for not logged in user
   if (!isAuthenticated) {
     return (
       <div className="landing-container">
         <div className="landing-content">
           <div className="landing-hero">
-
             <h1 className="landing-title">task buddy</h1>
-            <p className="landing-subtitle">get a little help with keeping track of your daily life!</p>
-
+            <p className="landing-subtitle">
+              get a little help with keeping track of your daily life!
+            </p>
             <button
               onClick={() => setShowAuthForm(true)}
               className="landing-cta"
             >
-              try it out!
+              Get Started
             </button>
           </div>
           
           <div className="features-grid">
             <div className="feature-card">
-              <CheckCircle2 className="feature-icon" />
-              <h3 className="feature-title">task management...</h3>
-              <p className="feature-description">create and edit your tasks easily</p>
+              <CheckCircle2 style={{ width: '3rem', height: '3rem', color: 'white', margin: '0 auto 15px' }} />
+              <h3>task management...</h3>
+              <p>create and edit your tasks easily...</p>
             </div>
             <div className="feature-card">
-              <Flag className="feature-icon" />
-              <h3 className="feature-title">...with priorities...</h3>
-              <p className="feature-description">mark which tasks are most important!</p>
+              <Flag style={{ width: '3rem', height: '3rem', color: 'white', margin: '0 auto 15px' }} />
+              <h3>...with priorities...</h3>
+              <p>mark which tasks are most important!</p>
             </div>
             <div className="feature-card">
-              <Filter className="feature-icon" />
-              <h3 className="feature-title">...and filtering!</h3>
-              <p className="feature-description">search by category or priority</p>
+              <Filter style={{ width: '3rem', height: '3rem', color: 'white', margin: '0 auto 15px' }} />
+              <h3>...and filtering!</h3>
+              <p>search by category or priority</p>
             </div>
           </div>
         </div>
@@ -113,7 +148,7 @@ export default function Home() {
   // actual main interface
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="main-content">
         {error && (
           <div className="error-message">
             {error}
@@ -127,7 +162,12 @@ export default function Home() {
         
         <TaskStats stats={stats} />
         
-        <div className="flex justify-between items-center mb-6">
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          marginBottom: '20px'
+        }}>
           <h2 className="card-title">
             Your Tasks ({filteredTasks.length})
           </h2>
@@ -135,7 +175,7 @@ export default function Home() {
             onClick={() => setShowTaskForm(true)}
             className="btn-primary"
           >
-            <Plus className="btn-icon" />
+            <Plus style={{ width: '1rem', height: '1rem' }} />
             <span>New Task</span>
           </button>
         </div>
@@ -158,7 +198,6 @@ export default function Home() {
             }}
           />
         )}
-        
       </div>
     </Layout>
   );

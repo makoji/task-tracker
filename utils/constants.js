@@ -3,14 +3,14 @@
 
   // categories
 export const TASK_CATEGORIES = [
-  'daily', 
-  'shopping',
-  'health',
-  'school',
-  'work',
-  'finance',
-  'family',
-  'pets'  // pets feels a bit random if im trying to simulate realistic categories, but i did also just run out of ideas + wanted a lot of choice
+  'Daily', 
+  'Shopping',
+  'Health',
+  'School',
+  'Work',
+  'Finance',
+  'Family',
+  'Pets'  // pets feels a bit random if im trying to simulate realistic categories, but i did also just run out of ideas + wanted a lot of choice
           // potentially useful in a delegation scenario? ie if you could forward tasks (esp pre-scheduled/repeating ones - whole different thing though)
           // to another person. eg, if you have a friend dogsitting for you, you could set it up so for the duration you're away, they get a daily task to go on a walk with the dog
                 // actually, the whole category based task delegation idea would be great for flatmates: you could set a specific category to be automatically set up for a specific person, but anyone can add tasks to it
@@ -22,10 +22,10 @@ export const TASK_CATEGORIES = [
           //   ^  no longer doing that because i realised having the normal and low levels of priotity marked with !s anyway is not a great idea  (= terrible ux; makes them look urgent when they aren't)
           //      also, having FOUR exclamation marks for a single tag was not particularly readable either.
 export const TASK_PRIORITIES = [
-  'low',
-  'normal',
-  'high',
-  'urgent'
+  'Low',
+  'Normal',
+  'High',
+  'Urgent'
 ];
 
 // adds colors to the priority levels - lot easier to understand visually

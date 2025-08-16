@@ -1,18 +1,15 @@
-
 import { useState } from 'react';
-import { TASK_CATEGORIES, TASK_PRIORITIES } from '../utils/constants.js';
 
 export default function TaskForm({ task, onSubmit, onClose }) {
   const [formData, setFormData] = useState(
     task || {
       title: '',
       description: '',
-      category: 'Personal',
-      priority: 'Medium',
+      category: 'Daily',
+      priority: 'Normal',
       dueDate: ''
     }
   );
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -33,16 +30,19 @@ export default function TaskForm({ task, onSubmit, onClose }) {
     setLoading(true);
     setError('');
 
+    // debug - logs what's being sent rn
+    console.log(' Sending task data:', formData);
+
     try {
       await onSubmit(formData);
     } catch (err) {
+      console.error(' Task creation error:', err);
       setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
 
-  
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -81,7 +81,7 @@ export default function TaskForm({ task, onSubmit, onClose }) {
             />
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
             <div>
               <label className="form-label">Category</label>
               <select
@@ -90,12 +90,20 @@ export default function TaskForm({ task, onSubmit, onClose }) {
                 onChange={handleInputChange}
                 className="form-select"
               >
-                {TASK_CATEGORIES.map(category => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
+                <option value="Daily">Daily</option>
+                <option value="Work">Work</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Health">Health</option>
+                <option value="School">School</option>
+                <option value="Finance">Finance</option>
+                <option value="Family">Family</option>
+                <option value="Friends">Friends</option>
+
               </select>
+              {/* show current value  (debugging)
+              <small style={{ color: '#666', fontSize: '12px' }}>
+                Current: "{formData.category}"
+              </small>*/}
             </div>
             
             <div>
@@ -106,12 +114,15 @@ export default function TaskForm({ task, onSubmit, onClose }) {
                 onChange={handleInputChange}
                 className="form-select"
               >
-                {TASK_PRIORITIES.map(priority => (
-                  <option key={priority} value={priority}>
-                    {priority}
-                  </option>
-                ))}
+                <option value="Low">Low</option>
+                <option value="Normal">Normal</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
               </select>
+              {/* show current value (debugging)
+              <small style={{ color: '#666', fontSize: '12px' }}>
+                Current: "{formData.priority}"
+              </small>*/}
             </div>
           </div>
           
@@ -129,10 +140,10 @@ export default function TaskForm({ task, onSubmit, onClose }) {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+            className="btn-primary"
+            style={{ width: '100%', justifyContent: 'center' }}
           >
-            {loading && <div className="loading-spinner" />}
-            <span>{loading ? 'Saving...' : (task ? 'Update Task' : 'Create Task')}</span>
+            {loading ? 'Saving...' : (task ? 'Update Task' : 'Create Task')}
           </button>
         </div>
         
@@ -140,7 +151,7 @@ export default function TaskForm({ task, onSubmit, onClose }) {
           onClick={onClose}
           className="modal-close"
         >
-          ×
+        
         </button>
       </div>
     </div>

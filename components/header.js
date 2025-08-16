@@ -15,7 +15,7 @@ export default function Header() {
       <div className="header-content">
         <div className="header-nav">
           <div className="header-brand">
-            <h1 className="header-title">Task Master</h1>
+            <h1 className="header-title">task buddy</h1>
             <span className="header-welcome">
               Welcome back, {user?.name || user?.email?.split('@')[0]}!
             </span>

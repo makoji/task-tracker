@@ -24,8 +24,11 @@ const TaskSchema = new mongoose.Schema({
 
     type: String,
     required: [true, 'Category is required'],
-    enum: ['daily', 'personal', 'shopping', 'health', 'school', 'finance', 'family', 'pets'],
-    default: 'personal'
+    enum: {
+      values: ['Daily', 'Shopping', 'Health', 'School', 'Finance', 'Family', 'Pets'],
+      message: '{VALUE} is not a valid category :('
+    },
+    default: 'Daily'
 
   },
 
@@ -33,8 +36,11 @@ const TaskSchema = new mongoose.Schema({
 
     type: String,
     required: [true, 'Priority is required'],
-    enum: ['low', 'normal', 'high', 'urgent'],
-    default: 'normal'
+    enum: {
+      value: ['Low', 'Normal', 'High', 'Urgent'],
+      message: '{VALUE} is not a valid priority :('
+    },
+    default: 'Normal'
 
   },
 
@@ -65,7 +71,7 @@ const TaskSchema = new mongoose.Schema({
 
 }, {
   timestamps: true
-});
+}); 
 
 // indexes
 TaskSchema.index({ userId: 1, createdAt: -1 });
