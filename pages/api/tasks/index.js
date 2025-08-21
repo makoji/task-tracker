@@ -38,7 +38,7 @@ export default async function handler(req, res) {
           res.status(200).json(tasks);
         } catch (error) {
           console.error('Error fetching tasks:', error);
-          res.status(500).json({ message: 'Error fetching tasks: ' + error.message });
+          res.status(500).json({ message: `Error fetching tasks: ${error.message}` });
         }
         break;
 
@@ -103,10 +103,10 @@ export default async function handler(req, res) {
           }
           
           if (error.name === 'CastError') {
-            return res.status(400).json({ message: 'Invalid data format: ' + error.message });
+            return res.status(400).json({ message: `Invalid data format: ${error.message}` });
           }
           
-          res.status(500).json({ message: 'Error creating task: ' + error.message });
+          res.status(500).json({ message: `Error creating task: ${error.message}` });
         }
         break;
 
@@ -118,6 +118,6 @@ export default async function handler(req, res) {
     }
   } catch (error) {
     console.error('API error:', error);
-    res.status(500).json({ message: 'Internal server error: ' + error.message });
+    res.status(500).json({ message: `Internal server error: ${error.message}` });
   }
 }
