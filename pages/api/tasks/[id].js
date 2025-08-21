@@ -58,14 +58,14 @@ export default async function handler(req, res) {
           }
 
           if (category !== undefined) {
-            const validCategories = ['Work', 'Personal', 'Shopping', 'Health', 'Education', 'Finance'];
+            const validCategories = ['Work', 'Daily', 'Shopping', 'Health', 'Education', 'Finance'];
             if (!validCategories.includes(category)) {
               return res.status(400).json({ message: 'Please select a valid category' });
             }
           }
 
           if (priority !== undefined) {
-            const validPriorities = ['Low', 'Medium', 'High', 'Urgent'];
+            const validPriorities = ['Low', 'Normal', 'High', 'Urgent'];
             if (!validPriorities.includes(priority)) {
               return res.status(400).json({ message: 'Please select a valid priority' });
             }

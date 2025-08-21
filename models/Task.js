@@ -15,14 +15,14 @@ const TaskSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Category is required'],
-    enum: ['Work', 'Personal', 'Shopping', 'Health', 'Education', 'Finance'],
-    default: 'Personal'
+    enum: ['Work', 'Daily', 'Shopping', 'Health', 'Education', 'Finance'],
+    default: 'Daily'
   },
   priority: {
     type: String,
     required: [true, 'Priority is required'],
-    enum: ['Low', 'Medium', 'High', 'Urgent'],
-    default: 'Medium'
+    enum: ['Low', 'Normal', 'High', 'Urgent'],
+    default: 'Normal'
   },
   completed: {
     type: Boolean,

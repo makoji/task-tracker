@@ -65,12 +65,12 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: 'Task description must be less than 500 characters' });
           }
 
-          const validCategories = ['Work', 'Personal', 'Shopping', 'Health', 'Education', 'Finance'];
+          const validCategories = ['Work', 'Daily', 'Shopping', 'Health', 'School', 'Finance', 'Friends', 'Family'];
           if (!category || !validCategories.includes(category)) {
             return res.status(400).json({ message: 'Please select a valid category' });
           }
 
-          const validPriorities = ['Low', 'Medium', 'High', 'Urgent'];
+          const validPriorities = ['Low', 'Normal', 'High', 'Urgent'];
           if (!priority || !validPriorities.includes(priority)) {
             return res.status(400).json({ message: 'Please select a valid priority' });
           }
