@@ -1,5 +1,5 @@
 /**
- * Format a date string for display
+ *    format a date string for display
  * @param {string|Date} dateString    <-    date in question
  * @param {string} format  <- allow one of the four ""types"" establised like 10 lines down ('short', 'long', 'relative', 'time')
  * @returns {string}   <- the adte in that format, as a string
