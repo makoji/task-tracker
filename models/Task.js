@@ -15,7 +15,7 @@ const TaskSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Category is required'],
-    enum: ['Work', 'Daily', 'Shopping', 'Health', 'Education', 'Finance'],
+    enum: ['Work', 'Daily', 'Shopping', 'Health', 'Education', 'Finance', 'Friends'],
     default: 'Daily'
   },
   priority: {
