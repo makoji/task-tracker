@@ -1,10 +1,9 @@
-## Getting Started
+Can be accessed at: https://task-tracker-iota-six.vercel.app
 
-First, 
-Then, run the development server:
+You can sign up, or alternatively use this premade account to view a list of pre-made tasks and check the sorting functionality.
 
-```bash
-npm run dev
-```
+username: 
+```2@mail.com```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+password: 
+```password!2```
