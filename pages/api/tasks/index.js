@@ -65,7 +65,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: 'Task description must be less than 500 characters' });
           }
 
-          const validCategories = ['Work', 'Daily', 'Shopping', 'Health', 'School', 'Finance', 'Friends', 'Family'];
+          const validCategories = ['Work', 'Daily', 'Shopping', 'Health', 'School', 'Finance', 'Family'];
           if (!category || !validCategories.includes(category)) {
             return res.status(400).json({ message: 'Please select a valid category' });
           }

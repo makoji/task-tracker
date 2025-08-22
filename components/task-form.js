@@ -97,8 +97,6 @@ export default function TaskForm({ task, onSubmit, onClose }) {
                 <option value="School">School</option>
                 <option value="Finance">Finance</option>
                 <option value="Family">Family</option>
-                <option value="Friends">Friends</option>
-
               </select>
               {/* show current value  (debugging)
               <small style={{ color: '#666', fontSize: '12px' }}>

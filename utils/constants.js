@@ -10,7 +10,6 @@ export const TASK_CATEGORIES = [
   'Work',
   'Finance',
   'Family',
-  'Friends',
   'Pets'  // pets feels a bit random if im trying to simulate realistic categories, but i did also just run out of ideas + wanted a lot of choice
           // potentially useful in a delegation scenario? ie if you could forward tasks (esp pre-scheduled/repeating ones - whole different thing though)
           // to another person. eg, if you have a friend dogsitting for you, you could set it up so for the duration you're away, they get a daily task to go on a walk with the dog
