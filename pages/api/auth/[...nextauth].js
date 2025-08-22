@@ -14,7 +14,7 @@ export const authOptions = {
       },
       async authorize(credentials) {
         try {
-          console.log('🔐 Authorize called with:', credentials.email);
+          console.log('Authorize called with:', credentials.email);
           
           await connectToDatabase();
 
@@ -92,7 +92,7 @@ export const authOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: false // Set to false for localhost
+        secure: false // set to false for localhost
       }
     }
   }
